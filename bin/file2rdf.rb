@@ -45,31 +45,12 @@ def rdf_create(symbl)
 
   if File.exist?(rdf_file)
     puts "  #{rdf_file} already exists. skip this file."
-#   return
+    return
   end
-
   parser = CosmicRdf::Parser.const_get(classify)
   converter = CosmicRdf::Converter.const_get(classify)
   parser.open(cosmic_file) do |tsv|
     converter.rdf_write(rdf_file, tsv)
-  end
-end
-
-def _test_rdf_create_sample
-  cnt = 0
-  gz_file = @dest_dir.join(CosmicRdf::FILES[:sample])
-  rdf_file  =  @out_dir.join(CosmicRdf::RDFS[:sample])
-  CosmicRdf::Parser::Sample.open(gz_file) do |tsv|
-    _s = CosmicRdf::Converter::Sample.rdf_write(rdf_file, tsv)
-  end
-end
-
-def _test_rdf_create_mutation
-  cnt = 0
-  gz_file = @dest_dir.join(CosmicRdf::FILES[:mutation])
-  rdf_file  =  @out_dir.join(CosmicRdf::RDFS[:mutation])
-  CosmicRdf::Parser::Mutation.open(gz_file) do |tsv|
-    _s = CosmicRdf::Converter::Mutation.rdf_write(rdf_file, tsv)
   end
 end
 
