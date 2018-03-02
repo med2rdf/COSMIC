@@ -24,15 +24,15 @@ COSMIC(http://cancer.sanger.ac.uk/cosmic)よりダウンロード可能な
 
 ### 直接GitHubから取得した場合
 実行環境に必要なgemをインストールします。  
->(Gemfile ファイルが在るディレクトリ) bundle install  
+> (Gemfile ファイルが在るディレクトリ) bundle install  
   
 ruby file2rdf.rb -d ［上記のファイルのあるディレクトリ］  
- -d 以下を省略すると［ /opt/ ］を参照し、ファイルが無ければエラー終了となります。  
+ -d 以下を省略すると［ /opt/ ］を参照し、ファイルが無ければエラーとなり対象のファイルはスキップされます。
+ 
   
 ### Docker を利用する場合（暫定）  
-  Dockerが利用できる環境で以下のコマンドにより自動的に変換スクリプトが実行され  
-  実行が終了するとイメージが削除されます。  
-docker run -v ［上記のファイルのあるディレクトリ］:/opt/ --hostname cosmicrdf -it --rm genomedianak/cosmic_rdf ruby /root/cosmic_rdf/bin/file2rdf.rb  
+  Dockerが利用できる環境で以下のコマンドにより自動的に変換スクリプトが実行され実行が終了するとイメージが削除されます。  
+> docker run -v ［上記のファイルのあるディレクトリ］:/opt/ --hostname cosmicrdf -it --rm genomedianak/cosmic_rdf ruby /root/cosmic_rdf/bin/file2rdf.rb  
 
 ※現在はDockerで全てのファイルを対象に行うと、2日以上かかります。  
   
