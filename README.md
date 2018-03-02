@@ -3,7 +3,7 @@
 COSMIC RDF Converter
 
 ## Description
-COSMIC(http://cancer.sanger.ac.uk/cosmic)よりダウンロード可能な
+COSMIC http://cancer.sanger.ac.uk/cosmic よりダウンロード可能な
 ファイルからRDF形式に変換するスクリプトです。
 
 - 対象のファイルは以下の通りです。  
