@@ -8,15 +8,15 @@ module CosmicRdf
   AVAILABLE_GRCH = [37, DEFAULT_GRCH].freeze
 
   FILES = {
-#    sample:         'CosmicSample.tsv.gz',
-#    mutation:       'CosmicMutantExport.tsv.gz',
+    sample:         'CosmicSample.tsv.gz',
+    mutation:       'CosmicMutantExport.tsv.gz',
     # census:         'CosmicMutantExportCensus.tsv.gz',
     # screen:         'CosmicGenomeScreensMutantExport.tsv.gz',
     # target:         'CosmicCompleteTargetedScreensMutantExport.tsv.gz',
-#    cna:            'CosmicCompleteCNA.tsv.gz',
-#    methylation:    'CosmicCompleteDifferentialMethylation.tsv.gz',
-#    ncv:            'CosmicNCV.tsv.gz',
-#    resistance:     'CosmicResistanceMutations.tsv.gz',
+    cna:            'CosmicCompleteCNA.tsv.gz',
+    methylation:    'CosmicCompleteDifferentialMethylation.tsv.gz',
+    ncv:            'CosmicNCV.tsv.gz',
+    resistance:     'CosmicResistanceMutations.tsv.gz',
     fusion:         'CosmicFusionExport.tsv.gz',
     struct:         'CosmicStructExport.tsv.gz',
     breakpoint:     'CosmicBreakpointsExport.tsv.gz',
@@ -57,8 +57,6 @@ module CosmicRdf
     census:        'http://identifiers.org/cosmic/',  ## gene_name
     screen:        'http://med2rdf.org/cosmic/screen#',
     target:        'http://med2rdf.org/cosmic/target#',
-    # expression:    'http://med2rdf.org/cosmic/mutation#',
-    # expression:    'http://med2rdf.org/cosmic/expressionid#',
     expression:    'http://cancer.sanger.ac.uk/cosmic/sample/overview?id=',
     cna:           'http://cancer.sanger.ac.uk/cosmic/cnv/overview?id=',
     methylation:   'http://med2rdf.org/cosmic/methylation/probeid#',
@@ -83,7 +81,8 @@ module CosmicRdf
     nci:           'https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=',
     nci_type:      'http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#',
     cosmic_search: 'http://cancer.sanger.ac.uk/cosmic/search?q=',
-    sio:           'http://semanticscience.org/resource/'
+    sio:           'http://semanticscience.org/resource/',
+
   }.freeze
 
   PREFIX = {

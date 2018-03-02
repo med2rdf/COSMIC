@@ -3,11 +3,11 @@
 COSMIC RDF Converter
 
 ## Description
-COSMIC(http://cancer.sanger.ac.uk/cosmic)���_�E�����[�h�\��
-�t�@�C������RDF�`���ɕϊ�����X�N���v�g�ł��B
+COSMIC(http://cancer.sanger.ac.uk/cosmic)よりダウンロード可能な
+ファイルからRDF形式に変換するスクリプトです。
 
-- �Ώۂ̃t�@�C���͈ȉ��̒ʂ�ł��B  
- �i�_�E�����[�h�ɂ�COSMIC�T�C�g�֓o�^���K�v�ł��j  
+- 対象のファイルは以下の通りです。  
+ （ダウンロードにはCOSMICサイトへ登録が必要です）  
   CosmicMutantExport.tsv.gz  
   CosmicStructExport.tsv.gz  
   CosmicBreakpointsExport.tsv.gz  
@@ -22,14 +22,17 @@ COSMIC(http://cancer.sanger.ac.uk/cosmic)���_�E�����[�h�\��
 
 ## Usage
 
-### ����GitHub����擾�����ꍇ
-ruby file2rdf.rb -d �m��L�̃t�@�C���̂���f�B���N�g���n 
- -d �ȉ����ȗ�����Ɓm /opt/ �n���Q�Ƃ��A�t�@�C����������΃G���[�I���ƂȂ�܂��B  
+### 直接GitHubから取得した場合
+実行環境に必要なgemをインストールします。  
+>(Gemfile ファイルが在るディレクトリ) bundle install  
   
-### Docker �𗘗p����ꍇ�i�b��j  
-  Docker�����p�ł�����ňȉ��̃R�}���h�ɂ�莩���I�ɕϊ��X�N���v�g�����s����  
-  ���s���I������ƃC���[�W���폜����܂��B  
-docker run -v �m��L�̃t�@�C���̂���f�B���N�g���n:/opt/ --hostname cosmicrdf -it --rm genomedianak/cosmic_rdf ruby /root/cosmic_rdf/bin/file2rdf.rb  
+ruby file2rdf.rb -d ［上記のファイルのあるディレクトリ］  
+ -d 以下を省略すると［ /opt/ ］を参照し、ファイルが無ければエラー終了となります。  
+  
+### Docker を利用する場合（暫定）  
+  Dockerが利用できる環境で以下のコマンドにより自動的に変換スクリプトが実行され  
+  実行が終了するとイメージが削除されます。  
+docker run -v ［上記のファイルのあるディレクトリ］:/opt/ --hostname cosmicrdf -it --rm genomedianak/cosmic_rdf ruby /root/cosmic_rdf/bin/file2rdf.rb  
 
-�����݂�Docker�őS�Ẵt�@�C����Ώۂɍs���ƁA2���ȏォ����܂��B  
+※現在はDockerで全てのファイルを対象に行うと、2日以上かかります。  
   
