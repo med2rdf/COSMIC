@@ -26,7 +26,7 @@ COSMIC http://cancer.sanger.ac.uk/cosmic よりダウンロード可能な
 実行環境に必要なgemをインストールします。  
 > (Gemfile ファイルが在るディレクトリ) bundle install  
   
-ruby file2rdf.rb -d ［上記のファイルのあるディレクトリ］  
+> ruby bin/file2rdf.rb -d ［上記のファイルのあるディレクトリ］  
  -d 以下を省略すると［ /opt/ ］を参照し、ファイルが無ければエラーとなり対象のファイルはスキップされます。
  
   
