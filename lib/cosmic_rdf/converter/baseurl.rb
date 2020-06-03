@@ -56,7 +56,7 @@ module CosmicRdf
         rdf_ttl = []
         rdf_ttl << "  rdfs:label \"#{val}\" ;" if 
           name == :gene_name
-        if val.is_a?(Integer) || val.is_a?(FalseClass) || val.is_a?(TrueClass)
+        if val.is_a?(Integer) || val.is_a?(Float) || val.is_a?(FalseClass) || val.is_a?(TrueClass)
           rdf_ttl << "  #{@predicate}#{name} #{val} ;"
         else
           rdf_ttl << "  #{@predicate}#{name} \"#{val}\" ;"
@@ -77,11 +77,9 @@ module CosmicRdf
         #sample_ids.sort!
         sample_ids.uniq!
         rdf_ttl = []
-        rdf_ttl << "  #{@predicate}have_sample[ \n"
         sample_ids.each do |sample_id|
           rdf_ttl << "    cosmic:sample sample:#{sample_id};"
         end
-        rdf_ttl << "  ] ;"
         return rdf_ttl
       end
 
@@ -108,21 +106,33 @@ module CosmicRdf
         return nil
       end
 
+      def self.gene_relation(cosmic_gene_name)
+        return nil if cosmic_gene_name =~ /Unclassifi/
+        unless cosmic_gene_name.nil?
+          gene_labels = cosmic_gene_name.split('_')
+          gene_label = gene_labels[0]
+          ret = "  med2rdf:gene genedirect:#{gene_label};\n"
+          if gene_labels.length == 2 then
+            return ret + "  med2rdf:transcipt genedirect:#{cosmic_gene_name};\n"
+          else
+            return ret
+          end
+        end
+        return nil
+      end
+
       def self.genesymbol_relation(acc, add_inx="")
         return nil if acc == "Unclassified_Cell_type_specific"
         if acc =~ /^((AC|AP|NC|NG|NM|NP|NR|NT|NW|XM|XP|XR|YP|ZP)_\d+|(NZ\_[A-Z]{4}\d+))(\.\d+)?$/
           return  "#{add_inx}  cosmic:refseq[\n" +
-                  "#{add_inx}     a #{CosmicRdf::RDF_CLASS[:transcript_seq]};\n" +
+                  "#{add_inx}    a #{CosmicRdf::RDF_CLASS[:transcript_seq]};\n" +
                   "#{add_inx}    rdfs:label  \"#{acc}\";\n" +
                   "#{add_inx}    dct:references <#{CosmicRdf::URIs[:refseq]}#{acc}>\n" +
                   "#{add_inx}  ] ;"
         end
         if acc =~ /^((ENS[A-Z]*[FPTG]\d{11}(\.\d+)?)|(FB\w{2}\d{7})|(Y[A-Z]{2}\d{3}[a-zA-Z](\-[A-Z])?)|([A-Z_a-z0-9]+(\.)?(t)?(\d+)?([a-z])?))$/
-          return  "#{add_inx}  cosmic:ensembl [\n" +
-                  "#{add_inx}    a #{CosmicRdf::RDF_CLASS[:transcript_seq]};\n" +
-                  "#{add_inx}    rdfs:label  \"#{acc}\";\n" +
-                  "#{add_inx}    dct:references <#{CosmicRdf::URIs[:ensembl]}#{acc}>\n" +
-                  "#{add_inx}  ] ;"
+           return "#{add_inx}  dct:identifier \"#{acc}\";\n" +
+                  "#{add_inx}  dct:references ensembl:#{acc} ;\n"
         end
         return    "  #{@predicate}accession_number \"#{acc}\";" unless acc.nil?
         return nil
@@ -130,13 +140,7 @@ module CosmicRdf
 
       def self.hgnc_relation(hgnc_id)
         if hgnc_id.to_s =~ /^[0-9]+$/
-          return  "" + 
-                  # "  #{@predicate}hgnc [\n" +
-                  "  cosmic:hgnc [\n" +
-                  "    a #{CosmicRdf::RDF_CLASS[:gene]};\n" +
-                  "    rdfs:label  \"HGNC:#{hgnc_id}\";\n" +
-                  "    dct:references <#{CosmicRdf::URIs[:hgncurl]}#{hgnc_id}>\n" +
-                  "  ] ;"
+          return  "dct:references hgncurl:#{hgnc_id}"
         end
         return    "  #{@predicate}hgnc #{hgnc_id} ;" unless hgnc_id.nil?
         return nil
@@ -155,8 +159,7 @@ module CosmicRdf
         return nil if mut_id.nil? || mut_id.to_s.empty?
 
         mut_id.delete!("COSM") unless mut_id =~ /^[0-9]+$/
-        return "  #{@predicate}mutation \"COSM#{mut_id}\" ;\n" +
-               "  cosmic:mutation mutation:#{mut_id} ;"
+        return "  med2rdf:variation mutation:#{mut_id} ;"
       end
       
       def self.cosmicgeneid_relation(cosmic_gene_id)
@@ -169,22 +172,42 @@ module CosmicRdf
         return nil
       end
 
-      def self.pmid_relation(pmid)
-        if pmid.to_s =~ /^[0-9]+$/
-          return  "  cosmic:pubmed [\n" +
-                  "    a idot:Pubmed;\n" +
-                  "    dct:references \"pubmed:#{pmid}\";\n" +
-                  "  ] ;"
+
+      def self.sample_relation(id)
+        if id.to_s =~ /^[0-9]+$/
+          return  "  cosmic:sample sample:#{id} ;\n";
         end
         return nil
       end
-      
+
+      def self.sample_relations(ids)
+        ret = ""
+        ids.each do |id|
+          r = sample_relation(id)
+          ret += r unless r == nil
+        end
+        return ret
+      end
+
+      def self.pmid_relation(pmid)
+        if pmid.to_s =~ /^[0-9]+$/
+          return  "  dct:references pubmed:#{pmid} ;\n"
+        end
+        return nil
+      end
+
+      def self.pmid_relations(ids)
+        ret = ""
+        ids.each do |id|
+          r = pmid_relation(id)
+          ret += r unless r == nil
+        end
+        return ret
+     end
+
       def self.studyid_relation(study_id)
         if study_id.to_s =~ /^[0-9]+$/
-          return  "  cosmic:study [\n" +
-                  "    dcat:identifier \"COSU#{study_id}\" ;\n" +
-                  "    dct:references <#{CosmicRdf::URIs[:study]}#{study_id}>\n" +
-                  "  ];"
+          return  "  cosmic:study study:#{study_id} ;\n"
           # return  "  cosmic:study_id \"COSU#{study_id}\" ;\n" +
           #        "  rdfs:seeAlso <#{CosmicRdf::URIs[:study]}#{study_id}>;"
         elsif study_id != nil
@@ -193,6 +216,15 @@ module CosmicRdf
           return nil
         end
       end
+
+      def self.studyid_relations(ids)
+        ret = ""
+        ids.each do |id|
+          r = studyid_relation(id)
+          ret += r unless r == nil
+        end
+        return ret
+     end
 
       def self.tcga_sample_relation(sample_name)
         if sample_name.start_with?("TCGA")
@@ -227,13 +259,13 @@ module CosmicRdf
         faldo_ref = ref_list.map{|ref| "      faldo:reference \"#{ref}\" ;" }.join("\n")
         return "" +
                "  faldo:location [\n" +
-               "    a faldo:InBetweenPosition ;\n" +
-               "    faldo:after [ \n" +
+               "    a faldo:Region ;\n" +
+               "    faldo:begin [ \n" +
                "      a faldo:ExactPosition ;\n"  +
                "      faldo:position #{start_pos} ;\n" +
                       faldo_ref +"\n" +
                "    ] ;\n" +
-               "    faldo:before [ \n" +
+               "    faldo:end [ \n" +
                "      a faldo:ExactPosition ;\n"  +
                "      faldo:position #{end_pos} ;\n" +
                       faldo_ref + "\n" +
@@ -338,6 +370,7 @@ module CosmicRdf
 @prefix idot:    <http://identifiers.org/terms#> .
 @prefix pubmed:  <http://identifiers.org/pubmed/> .
 @prefix obo:     <http://purl.obolibrary.org/obo/> .
+@prefix sio:     <http://semanticscience.org/resource/> .
 @prefix dbp:     <http://dbpedia.org/page/classes#> .
 @prefix med2rdf: <http://med2rdf.org/ontology/med2rdf> .
 @prefix faldo:   <http://biohackathon.org/resource/faldo#> .

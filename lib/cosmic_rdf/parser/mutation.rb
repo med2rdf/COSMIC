@@ -28,6 +28,10 @@ module CosmicRdf
           name: :hgnc_id,
           fmt:  :i
         },
+        'Sample name' => {
+          name: :sample_name,
+          fmt:  :s
+        },
         'ID_sample' => {
           name: :sample_id,
           fmt:  :i
@@ -36,43 +40,43 @@ module CosmicRdf
 #          name: :tumor_id,
 #          fmt:  :i
 #        },
-#        'Primary site' => {
-#          name: :primary_site,
-#          fmt:  :n
-#        },
-#        'Site subtype 1' => {
-#          name: :site_subtype_1,
-#          fmt:  :n
-#        },
-#        'Site subtype 2' => {
-#          name: :site_subtype_2,
-#          fmt:  :n
-#        },
-#        'Site subtype 3' => {
-#          name: :site_subtype_3,
-#          fmt:  :n
-#        },
-#        'Primary histology' => {
-#          name: :primary_histology,
-#          fmt:  :n
-#        },
-#        'Histology subtype 1' => {
-#          name: :histology_subtype_1,
-#          fmt:  :n
-#        },
-#        'Histology subtype 2' => {
-#          name: :histology_subtype_2,
-#          fmt:  :n
-#        },
-#        'Histology subtype 3' => {
-#          name: :histology_subtype_3,
-#          fmt:  :n
-#        },
+        'Primary site' => {
+          name: :primary_site,
+          fmt:  :s
+        },
+        'Site subtype 1' => {
+          name: :site_subtype_1,
+          fmt:  :s
+        },
+        'Site subtype 2' => {
+          name: :site_subtype_2,
+          fmt:  :s
+        },
+        'Site subtype 3' => {
+          name: :site_subtype_3,
+          fmt:  :s
+        },
+        'Primary histology' => {
+          name: :primary_histology,
+          fmt:  :s
+        },
+        'Histology subtype 1' => {
+          name: :histology_subtype_1,
+          fmt:  :s
+        },
+        'Histology subtype 2' => {
+          name: :histology_subtype_2,
+          fmt:  :s
+        },
+        'Histology subtype 3' => {
+          name: :histology_subtype_3,
+          fmt:  :s
+        },
 #        'Genome-wide screen' => {
 #          name: :whole_genome_screen,
 #          fmt:  :b
 #        },
-        'Mutation ID' => {
+        'MUTATION_ID' => {
           name: :mutation_id,
           fmt:  :s
         },
@@ -92,10 +96,10 @@ module CosmicRdf
           name: :zygosity,
           fmt:  :s
         },
-        'LOH' => {
-          name: :loh,
-          fmt:  :b
-        },
+#        'LOH' => {
+#          name: :loh,
+#          fmt:  :b
+#        },
         'GRCh' => {
           name: :grch,
           fmt:  :i
@@ -136,12 +140,28 @@ module CosmicRdf
           name: :study_id,
           fmt:  :i
         },        
-        'Sample source' => {
+        'Sample Type' => {
           name: :sample_source,
           fmt:  :s
         },   
         'Tumour origin' => {
           name: :tumour_origin,
+          fmt:  :s
+        },
+        'Age' => {
+          name: :age,
+          fmt:  :i
+        },
+        'HGVSP' => {
+          name: :hgvsp,
+          fmt:  :s
+        },
+        'HGVSC' => {
+          name: :hgvsc,
+          fmt:  :s
+        },
+        'HGVSG' => {
+          name: :hgvsg,
           fmt:  :s
         }
       }.freeze

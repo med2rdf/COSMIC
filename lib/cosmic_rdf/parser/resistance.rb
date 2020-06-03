@@ -24,13 +24,13 @@ module CosmicRdf
         },
         'Census Gene' => {
           name: :census_gene,
-          fmt:  :b
+          fmt:  :s
         },
         'Drug Name' => {
           name: :drug_name,
           fmt:  :s
         },
-        'ID Mutation' => {
+        'MUTATION_ID' => {
           name: :mutation_id,
           fmt:  :s
         },
@@ -80,7 +80,7 @@ module CosmicRdf
         },
         'Somatic Status' => {
           name: :somatic_status,
-          fmt:  :i
+          fmt:  :s
         },
         'Sample Source' => {
           name: :sample_source,
@@ -90,6 +90,10 @@ module CosmicRdf
           name: :zygosity,
           fmt:  :s
         },
+        'Tier' => {
+          name: :tier,
+          fmt:  :s
+        }
 #        'Genome Coordinates (GRCh37)' => {
 #          name: :genomic_position,
 #          fmt: ->(v) { v.blank? || v == ':..' ? nil : v }

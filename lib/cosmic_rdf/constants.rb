@@ -74,9 +74,9 @@ module CosmicRdf
     cancerDigital: 'http://cancer.digitalslidearchive.net/index_mskcc.php?slide_name=',
     cosmicgene:    'http://identifiers.org/cosmic/',
     refseq:        'http://identifiers.org/refseq/',
-    hgncurl:       'http://identifiers.org/hgnc/',
+    hgncurl:       'http://www.genenames.org/data/gene-symbol-report/#!/hgnc_id/HGNC:',
     pubmed:        'http://identifiers.org/pubmed/',
-    ensembl:       'http://identifiers.org/ensembl/',
+    ensembl:       'http://www.ensembl.org/id/',
     ncbigene:      'http://identifiers.org/ncbigene/',
     nci:           'https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=',
     nci_type:      'http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#',
@@ -99,10 +99,12 @@ module CosmicRdf
     resistance:  "",  ## -> S is  mutation
     methylation: "@prefix methylation:<#{URIs[:methylation]}> .",
     breakpoint:  "@prefix breakpoint:<#{URIs[:breakpoint]}> .",
+    genedirect:  "@prefix genedirect:<#{URIs[:genedirect]}> .",
     study:       "@prefix study:<#{URIs[:study]}> .",
     cosmicncv:   "@prefix cosmicncv:<#{URIs[:cosmicncv]}> .",
     hgnc:        "@prefix hgnc:<#{URIs[:cosmicgene]}> .",
-    hgncurl:     "@prefix hgnc:<#{URIs[:hgnc]}> .",
+    hgncurl:     "@prefix hgncurl:<#{URIs[:hgncurl]}> .",
+    ensembl:     "@prefix ensembl:<#{URIs[:ensembl]}> .",
     struct:      "@prefix struct:<#{URIs[:struct]}> .",
     transcript:  "@prefix transcript:<#{URIs[:transcript]}> .",
     cosmicgene:  "@prefix cosmicgene:<#{URIs[:cosmicgene]}> .",
@@ -147,7 +149,7 @@ module CosmicRdf
     resistance:  'a obo:NCIT_C102626;',  ## Drug Resistance Status
     methylation: 'a obo:NCIT_C16848 ;',   ## Methylation 
     breakpoint:  'a obo:SO_0000699 ;',   ##  junction
-    transcript:  'a med2rdf:Gene ;',
+    transcript:  'a med2rdf:Transcript ;',
     struct:      'a obo:SO_0001537 ;',
     hgnc:           'obo:NCIT_C100094',
     gene:           'med2rdf:Gene', 
