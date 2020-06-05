@@ -76,9 +76,9 @@ module CosmicRdf
       def self.sampleids_relation(sample_ids)
         #sample_ids.sort!
         sample_ids.uniq!
-        rdf_ttl = []
+        rdf_ttl = ""
         sample_ids.each do |sample_id|
-          rdf_ttl << "    cosmic:sample sample:#{sample_id};"
+          rdf_ttl += "    cosmic:sample sample:#{sample_id}; \n"
         end
         return rdf_ttl
       end
@@ -164,7 +164,7 @@ module CosmicRdf
       
       def self.cosmicgeneid_relation(cosmic_gene_id)
         if cosmic_gene_id.to_s =~ /^[0-9]+$/
-          return "  dcat:identifier \"COSG#{cosmic_gene_id}\" ;\n" +
+          return "  dct:identifier \"COSG#{cosmic_gene_id}\" ;\n" +
                  "  rdfs:seeAlso <#{CosmicRdf::URIs[:cosmic_search]}COSG#{cosmic_gene_id}>;"
         elsif cosmic_gene_id != nil
           return "  cosmic:cosmic_geneid \"#{cosmic_gene_id}\" ;\n"
@@ -284,13 +284,20 @@ module CosmicRdf
         end
       end
 
-
+      def self.mutation_ref_alt(hgvsg)
+        if hgvsg =~ /ins([A-Z]+)$/
+          return "  med2rdf:alterationAlelle \"#{$1}\" ;"
+        elsif hgvsg =~ /([A-Z]+)>([A-Z]+)$/
+          return "  med2rdf:referenceAlelle \"#{$1}\" ;\n" +
+                 "  med2rdf:alterationAlelle \"#{$2}\" ;"
+        end
+      end
 
       def self.add_info_samples(fout,sample_class)
         @smpl_hash.each_pair do |sample_id, smpl_item|
           rdf_ttl = []
           rdf_ttl << "sample:#{sample_id} \n"+ ## Subject
-                     "  dcat:identifier \"COSS#{sample_id}\" ;"
+                     "  dct:identifier \"COSS#{sample_id}\" ;"
           sample_class.accessors.each do |item|
             smpl_item.send(item).each do |val|
               next if val.nil? || val.to_s.empty?
@@ -372,7 +379,7 @@ module CosmicRdf
 @prefix obo:     <http://purl.obolibrary.org/obo/> .
 @prefix sio:     <http://semanticscience.org/resource/> .
 @prefix dbp:     <http://dbpedia.org/page/classes#> .
-@prefix med2rdf: <http://med2rdf.org/ontology/med2rdf> .
+@prefix med2rdf: <http://med2rdf.org/ontology/med2rdf#> .
 @prefix faldo:   <http://biohackathon.org/resource/faldo#> .
 
 EOS

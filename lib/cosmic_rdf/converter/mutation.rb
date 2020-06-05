@@ -24,7 +24,7 @@ module CosmicRdf
       @keyword = "mutation"
       @distribution = "CosmicMutantExport.tsv.gz"
 
-      @ignore = [:mutation_id, :sample_id]
+      @ignore = [:mutation_id]
 
       @mut_hash = {}
       @smpl_hash = {}
@@ -55,7 +55,7 @@ module CosmicRdf
           @after_rdf = []
           @mutid = mut_id.delete('COSM')
           rdf_ttl << "#{@current.to_sym}:#{@mutid} #{so_type(mut_item.description)}, #{CosmicRdf::RDF_CLASS[:variation]} ;" ## Subject
-          rdf_ttl << "  dcat:identifier \"#{mut_id}\" ;"
+          rdf_ttl << "  dct:identifier \"#{mut_id}\" ;"
           
           @row = mut_item
           Mutation_Items.accessors.each do |item|
@@ -73,11 +73,10 @@ module CosmicRdf
                     gene_name
               when :genomic_position
                     genomic_position
-              when :mutation_cds
-                    mutation_cds
+              when :hgvsg
+                    hgvsg
               when :mutation_somatic_status  
                     mutation_somatic_status(vals)
-              when :grch
               #when :description,:grch,:genomic_position,:snp,:fathmm_prediction,:fathmm_score
               else
                   puts "caution! duplicate item? #{item} #{vals}" if 
@@ -97,7 +96,7 @@ module CosmicRdf
           @row = smpl_item
           rdf_ttl = []
           rdf_ttl << "sample:#{smpl_id} #{CosmicRdf::RDF_CLASS[:sample]} ;" ## Subject
-          rdf_ttl << "  dcat:identifier \"COSS#{smpl_id}\" ;"
+          rdf_ttl << "  dct:identifier \"COSS#{smpl_id}\" ;"
           Sample_Items.accessors.each do |item|
             vals = smpl_item.send(item)
             vals.each do |val|
@@ -203,6 +202,12 @@ module CosmicRdf
         rdf_ttl << default_rdf("genomic_position", pos)
 
         chr, pos1 , pos2 = pos.split(/:|-/)
+        if chr == "23" then
+          chr = "X"
+        elsif chr == "24" then
+          chr = "Y"
+        end
+        rdf_ttl << default_rdf("chromosome", chr)
         start_pos, end_pos = genomic_start_end_pos(pos1, pos2)
         return rdf_ttl if start_pos.nil?
 
@@ -217,35 +222,20 @@ module CosmicRdf
           return nil
         end
 
-        strand = @row.strand.first
-        start_pos, end_pos = ""
-        if pos1 == pos2    # snp, ins
-          if strand == '+'
-            start_pos = pos1
-            end_pos   = pos2.to_i + 1
-          elsif strand == '-'
-            start_pos = pos2
-            end_pos   = pos1.to_i - 1
-          end
-          
-        else ## del
-          if strand == '+'
-            start_pos = pos1
-            end_pos   = pos2
-          elsif strand == '-'
-            start_pos = pos2
-            end_pos   = pos1
-          end
+        start_pos = pos1
+        end_pos = pos2
+        if pos1 > pos2
+           start_pos = pos2
+           end_pos = pos1
         end
 
-        return nil if start_pos.to_s.empty? || end_pos.to_s.empty? 
         return [start_pos, end_pos]
       end
       
-      def self.mutation_cds
+      def self.hgvsg
         rdf_ttl = []
-        rdf_ttl << default_rdf("mutation_cds", @row.mutation_cds.first)
-        mut_ref_alt = mutation_nuc(@row.mutation_cds.first)
+        rdf_ttl << default_rdf("hgvsg", @row.hgvsg.first)
+        mut_ref_alt = mutation_ref_alt(@row.hgvsg.first)
         rdf_ttl << mut_ref_alt unless mut_ref_alt.nil? || mut_ref_alt.empty?
       end
 
