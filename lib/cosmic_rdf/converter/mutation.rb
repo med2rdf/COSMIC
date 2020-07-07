@@ -95,7 +95,7 @@ module CosmicRdf
         @smpl_hash.each_pair do |smpl_id, smpl_item|
           @row = smpl_item
           rdf_ttl = []
-          rdf_ttl << "sample:#{smpl_id} #{CosmicRdf::RDF_CLASS[:sample]} ;" ## Subject
+          rdf_ttl << "sample:#{smpl_id} #{CosmicRdf::RDF_CLASS[:sample]}" ## Subject
           rdf_ttl << "  dct:identifier \"COSS#{smpl_id}\" ;"
           Sample_Items.accessors.each do |item|
             vals = smpl_item.send(item)
