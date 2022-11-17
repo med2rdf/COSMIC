@@ -7,7 +7,7 @@ module CosmicRdf
     class Mutation < Baseurl
       # Mutation include symbols.
       class Mutation_Items < Base_Items
-        attr_accessor :mutation_id, :gene_name, :mutation_cds, :mutation_aa, :description, :genomic_position, :grch, :strand, :snp, :mutation_somatic_status, :fathmm_prediction, :fathmm_score, :sample_id, :pmid, :hgvsp, :hgvsc, :hgvsg
+        attr_accessor :mutation_id, :gene_name, :mutation_cds, :mutation_aa, :description, :genomic_position, :grch, :strand, :mutation_somatic_status, :sample_id, :pmid, :hgvsp, :hgvsc, :hgvsg
       end
       # Gene include symbols.
       class Gene_Items < Base_Items
